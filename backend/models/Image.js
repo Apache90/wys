@@ -3,12 +3,29 @@ const sequelize = require('../config/database');
 const User = require('./User');
 
 const Image = sequelize.define('Image', {
-  filename: { type: DataTypes.STRING, allowNull: false },
-  upload_date: { type: DataTypes.DATE, defaultValue: DataTypes.NOW }
+  user_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  image: {
+    type: DataTypes.BLOB('long'),
+    allowNull: false
+  },
+  filename: {
+    type: DataTypes.STRING
+  },
+  mimetype: {
+    type: DataTypes.STRING
+  },
+  upload_date: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
+  }
 }, {
-  timestamps: false
+  timestamps: false,
+  tableName: 'images'
 });
 
-Image.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+Image.belongsTo(User, { foreignKey: 'user_id' });
 
 module.exports = Image;

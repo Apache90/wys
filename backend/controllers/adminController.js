@@ -1,52 +1,46 @@
 const User = require('../models/User');
 const Image = require('../models/Image');
 const multer = require('multer');
-const path = require('path');
 
-// Configuración de multer para almacenar imágenes .png
-const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, 'uploads/');
-  },
-  filename: function(req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname);
-  }
-});
-
+// Almacenar imágenes en memoria (no en disco)
+const storage = multer.memoryStorage();
 const fileFilter = (req, file, cb) => {
-  if (file.mimetype === 'image/png') {
-    cb(null, true);
-  } else {
-    cb(new Error('Solo se permiten archivos .png'), false);
-  }
+  if (file.mimetype === 'image/png') cb(null, true);
+  else cb(new Error('Solo se permiten archivos .png'), false);
 };
 
 const upload = multer({ storage, fileFilter });
 
-exports.createUser = async (req, res) => {
+async function createUser(req, res) {
   const { nombre, apellido, dni, telefono, rol } = req.body;
   try {
+    const existing = await User.findOne({ where: { dni } });
+    if (existing) {
+      return res.status(400).json({ message: 'Este DNI ya está registrado.' });
+    }
     const newUser = await User.create({ nombre, apellido, dni, telefono, rol });
     res.status(201).json(newUser);
   } catch (error) {
     console.error("Error al crear usuario:", error);
     res.status(500).json({ message: 'Error al crear el usuario', error: error.message });
   }
-};
+}
 
-exports.uploadImage = [
+const uploadImage = [
   upload.single('image'),
   async (req, res) => {
     const { dni } = req.body;
     try {
       const user = await User.findOne({ where: { dni } });
-      if (!user) {
-        return res.status(404).json({ message: 'Usuario no encontrado' });
-      }
+      if (!user) return res.status(404).json({ message: 'Usuario no encontrado' });
+
       const newImage = await Image.create({
-        filename: req.file.filename,
-        user_id: user.id
+        user_id: user.id,
+        image: req.file.buffer,
+        filename: req.file.originalname,
+        mimetype: req.file.mimetype
       });
+
       res.status(201).json({ message: 'Imagen subida correctamente', image: newImage });
     } catch (error) {
       console.error("Error al subir imagen:", error);
@@ -54,3 +48,8 @@ exports.uploadImage = [
     }
   }
 ];
+
+module.exports = {
+  createUser,
+  uploadImage
+};

@@ -1,4 +1,3 @@
-// components/AdminPanel.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
 
@@ -8,6 +7,8 @@ const AdminPanel = ({ onLogout }) => {
   const [dniSearch, setDniSearch] = useState('');
   const [selectedUser, setSelectedUser] = useState(null);
   const [image, setImage] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
   const handleCreateUser = async (e) => {
     e.preventDefault();
@@ -15,8 +16,10 @@ const AdminPanel = ({ onLogout }) => {
       await axios.post('http://localhost:5000/api/admin/create-user', form);
       setMessage('Usuario creado con éxito');
       setForm({ nombre: '', apellido: '', dni: '', telefono: '', rol: 'paciente' });
-    } catch {
-      setMessage('Error al crear usuario');
+    } catch (error) {
+      const msg = error.response?.data?.message || 'Error al crear usuario';
+      setModalMessage(msg);
+      setShowModal(true);
     }
   };
 
@@ -139,6 +142,21 @@ const AdminPanel = ({ onLogout }) => {
           </button>
         </form>
       </section>
+
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded shadow-md w-80">
+            <h3 className="text-lg font-semibold mb-2">Aviso</h3>
+            <p className="mb-4">{modalMessage}</p>
+            <button
+              onClick={() => setShowModal(false)}
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

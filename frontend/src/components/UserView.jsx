@@ -18,15 +18,6 @@ const UserView = ({ user, onLogout }) => {
     fetchImages();
   }, [user.dni]);
 
-  const handleDownload = async (filename) => {
-    const link = document.createElement('a');
-    link.href = `http://localhost:5000/uploads/${filename}`;
-    link.setAttribute('download', filename);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center">Cargando imágenes...</div>;
   }
@@ -50,16 +41,17 @@ const UserView = ({ user, onLogout }) => {
           <li key={img.id} className="border p-4 rounded">
             <p>{new Date(img.upload_date).toLocaleDateString()}</p>
             <img
-              src={`http://localhost:5000/uploads/${img.filename}`}
-              alt="Imagen subida"
+              src={img.base64}
+              alt={img.filename}
               className="mt-2 max-w-full h-auto"
             />
-            <button
-              onClick={() => handleDownload(img.filename)}
-              className="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600 mt-2 inline-block"
+            <a
+              href={img.base64}
+              download={img.filename}
+              className="inline-block mt-2 bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600"
             >
               Descargar
-            </button>
+            </a>
           </li>
         ))}
       </ul>
