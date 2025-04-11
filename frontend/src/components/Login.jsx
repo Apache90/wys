@@ -16,7 +16,7 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-gray-500">
       <form onSubmit={handleLogin} className="bg-white p-8 rounded shadow-md w-80">
         <h2 className="text-2xl font-bold mb-4 text-center">Iniciar Sesión</h2>
         {error && <div className="text-red-500 mb-4">{error}</div>}

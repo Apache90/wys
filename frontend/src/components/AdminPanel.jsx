@@ -1,63 +1,60 @@
+// components/AdminPanel.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const AdminPanel = () => {
-  const [form, setForm] = useState({
-    nombre: '',
-    apellido: '',
-    dni: '',
-    telefono: '',
-    rol: 'paciente'
-  });
+const AdminPanel = ({ onLogout }) => {
+  const [form, setForm] = useState({ nombre: '', apellido: '', dni: '', telefono: '', rol: 'paciente' });
   const [message, setMessage] = useState('');
   const [dniSearch, setDniSearch] = useState('');
   const [selectedUser, setSelectedUser] = useState(null);
   const [image, setImage] = useState(null);
 
-  // Crear usuario
   const handleCreateUser = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/api/admin/create-user', form);
+      await axios.post('http://localhost:5000/api/admin/create-user', form);
       setMessage('Usuario creado con éxito');
       setForm({ nombre: '', apellido: '', dni: '', telefono: '', rol: 'paciente' });
-    } catch (error) {
+    } catch {
       setMessage('Error al crear usuario');
     }
   };
 
-  // Buscar usuario por DNI (puedes implementar un endpoint de búsqueda o reutilizar el de login)
   const handleSearchUser = async () => {
     try {
       const res = await axios.post('http://localhost:5000/api/auth/login', { dni: dniSearch });
       setSelectedUser(res.data.user);
-    } catch (error) {
+    } catch {
       setMessage('Usuario no encontrado');
     }
   };
 
-  // Subir imagen para el usuario seleccionado
   const handleUploadImage = async (e) => {
     e.preventDefault();
     if (!selectedUser) return;
     const formData = new FormData();
     formData.append('dni', selectedUser.dni);
     formData.append('image', image);
-
     try {
-      const res = await axios.post('http://localhost:5000/api/admin/upload-image', formData, {
+      await axios.post('http://localhost:5000/api/admin/upload-image', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setMessage('Imagen subida correctamente');
-    } catch (error) {
+    } catch {
       setMessage('Error al subir la imagen');
     }
   };
 
   return (
     <div className="p-8">
-      <h2 className="text-2xl font-bold mb-4">Panel de Administrador</h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold">Panel de Administrador</h2>
+        <button onClick={onLogout} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+          Cerrar sesión
+        </button>
+      </div>
       {message && <p className="mb-4 text-green-600">{message}</p>}
+
       <section className="mb-8">
         <h3 className="text-xl font-semibold mb-2">Crear Usuario</h3>
         <form onSubmit={handleCreateUser} className="space-y-4">
