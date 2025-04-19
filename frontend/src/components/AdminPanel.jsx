@@ -100,8 +100,8 @@ const AdminPanel = ({ onLogout }) => {
             <option value="paciente">Paciente</option>
             <option value="admin">Administrador</option>
           </select>
-          <button type="submit" className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
-            Crear Usuario
+          <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-green-600">
+            CREAR USUARIO
           </button>
         </form>
       </section>
@@ -117,7 +117,7 @@ const AdminPanel = ({ onLogout }) => {
             className="border p-2 rounded"
           />
           <button onClick={handleSearchUser} className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
-            Buscar
+            BUSCAR
           </button>
         </div>
         {selectedUser && (
@@ -130,29 +130,39 @@ const AdminPanel = ({ onLogout }) => {
 
       <section>
         <h3 className="text-xl font-semibold mb-2">Subir Imagen para Usuario</h3>
-        <form onSubmit={handleUploadImage} className="flex flex-col space-y-4">
-          <input
-            type="file"
-            accept=".png"
-            onChange={(e) => setImage(e.target.files[0])}
-            required
-          />
-          <button type="submit" className="bg-purple-500 text-white py-2 px-4 rounded hover:bg-purple-600">
-            Subir Imagen
+        <form onSubmit={handleUploadImage} className="flex flex-col space-y-4 ">
+          <div className="relative">
+            <input
+              type="file"
+              accept=".png"
+              onChange={(e) => setImage(e.target.files[0])}
+              required
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              id="fileInput"
+            />
+            <label
+              htmlFor="fileInput"
+              className="inline-block bg-gray-400 text-white py-2 px-4 rounded hover:bg-blue-600 cursor-pointer"
+            >
+              {image ? image.name : 'Seleccionar imagen'}
+            </label>
+          </div>
+          <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-purple-600">
+            SUBIR IMAGEN
           </button>
         </form>
       </section>
 
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-opacity-30 backdrop-blur-sm z-50">
           <div className="bg-white p-6 rounded shadow-md w-80">
-            <h3 className="text-lg font-semibold mb-2">Aviso</h3>
+            <h3 className="text-lg font-semibold mb-2">ATENCIÓN!</h3>
             <p className="mb-4">{modalMessage}</p>
             <button
               onClick={() => setShowModal(false)}
               className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
             >
-              Cerrar
+              CERRAR
             </button>
           </div>
         </div>

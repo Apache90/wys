@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import logoFondo from '../assets/logoGris2.png';
 
 const Login = ({ onLogin }) => {
   const [dni, setDni] = useState('');
@@ -16,9 +17,16 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-500">
-      <form onSubmit={handleLogin} className="bg-white p-8 rounded shadow-md w-80">
-        <h2 className="text-2xl font-bold mb-4 text-center">Iniciar Sesión</h2>
+    
+    <div className="relative min-h-screen flex items-center justify-center bg-gray-200 overflow-hidden">
+      <img
+        src={logoFondo}
+        alt="Logo"
+        className="absolute top-0 left-0 w-full h-full object-contain opacity-100 blur-sm pointer-events-none z-0"
+      />
+      <form onSubmit={handleLogin} className="relative z-10 bg-white bg-opacity-90 p-8 rounded shadow-md w-100">
+        <h1 className="text-3xl font-bold mb-1 text-center">G & W</h1>
+        <p className='mb-4 text-center'>Para visualizar su imágen por favor ingrese su DNI. En caso de no poder ingresar por favor comuniquese con nuestro consultorio</p>
         {error && <div className="text-red-500 mb-4">{error}</div>}
         <input
           type="text"
