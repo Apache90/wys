@@ -2,7 +2,6 @@ const User = require('../models/User');
 const Image = require('../models/Image');
 const multer = require('multer');
 
-// Almacenar imágenes en memoria (no en disco)
 const storage = multer.memoryStorage();
 const fileFilter = (req, file, cb) => {
   if (file.mimetype === 'image/png') cb(null, true);
