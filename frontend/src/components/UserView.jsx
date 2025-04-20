@@ -8,7 +8,7 @@ const UserView = ({ user, onLogout }) => {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/user/${user.dni}/images`);
+        const res = await axios.get(`http://mysql.railway.internal:3306/api/user/${user.dni}/images`);
         setImages(res.data.images);
       } catch (error) {
         console.error('Error al obtener imágenes:', error);

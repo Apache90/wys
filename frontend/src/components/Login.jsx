@@ -9,7 +9,7 @@ const Login = ({ onLogin }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', { dni });
+      const res = await axios.post('http://mysql.railway.internal:3306/api/auth/login', { dni });
       onLogin(res.data.user);
     } catch (err) {
       setError(err.response?.data?.message || 'Error al iniciar sesión');
