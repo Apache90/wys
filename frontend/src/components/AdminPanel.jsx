@@ -13,7 +13,7 @@ const AdminPanel = ({ onLogout }) => {
   const handleCreateUser = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/admin/create-user', form);
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/admin/create-user`, form);
       setMessage('Usuario creado con éxito');
       setForm({ nombre: '', apellido: '', dni: '', telefono: '', rol: 'paciente' });
     } catch (error) {
@@ -25,7 +25,7 @@ const AdminPanel = ({ onLogout }) => {
 
   const handleSearchUser = async () => {
     try {
-      const res = await axios.post('http://mysql.railway.internal:3306/api/auth/login', { dni: dniSearch });
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, { dni: dniSearch });
       setSelectedUser(res.data.user);
     } catch {
       setMessage('Usuario no encontrado');
@@ -39,7 +39,7 @@ const AdminPanel = ({ onLogout }) => {
     formData.append('dni', selectedUser.dni);
     formData.append('image', image);
     try {
-      await axios.post('http://mysql.railway.internal:3306/api/admin/upload-image', formData, {
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/admin/upload-image`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setMessage('Imagen subida correctamente');
