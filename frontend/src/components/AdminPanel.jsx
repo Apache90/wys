@@ -28,7 +28,9 @@ const AdminPanel = ({ onLogout }) => {
       const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, { dni: dniSearch });
       setSelectedUser(res.data.user);
     } catch {
-      setMessage('Usuario no encontrado');
+      setModalMessage('Usuario no encontrado');
+      setShowModal(true);
+      setSelectedUser(null); // asegurás que no se muestre un usuario anterior
     }
   };
 
